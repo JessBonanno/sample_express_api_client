@@ -1,1 +1,1 @@
-export * from './PeopleList.jsx'
+export * from './PeopleList'
