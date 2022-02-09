@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import styles from './peopleList.module.scss';
 import axios from 'axios';
 
-export const PeopleList = () => {
-	const [people, setPeople] = useState([]);
-
-	const getAllPeople = async () => {
+export const PeopleList = (props) => {
+	const { getAllPeople, people, prepareFormForUpdate} = props
+	const deletePerson = async (id) => {
 		try {
-			const result = await axios.get('http://localhost:5000/api/people');
-			setPeople(result.data);
+			await axios.delete(`http://localhost:5000/api/people/${id}`);
 		} catch (err) {
 			console.error(err);
 		}
+		getAllPeople();
 	};
-	console.log({ people });
+
+
 
 	return (
 		<div className={styles.container}>
@@ -24,6 +24,8 @@ export const PeopleList = () => {
 						<p>First Name: {person.firstName}</p>
 						<p>Last Name: {person.lastName}</p>
 						{person?.profession && <p>Occupation: {person.profession}</p>}
+						<button onClick={() => deletePerson(person.id)}>Delete Person</button>
+						<button onClick={(e) => prepareFormForUpdate(e, person.id)}>Update Person</button>
 					</div>
 				);
 			})}
